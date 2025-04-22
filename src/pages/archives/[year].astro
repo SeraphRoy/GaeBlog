@@ -1,0 +1,42 @@
+---
+// src/pages/archives/[year].astro
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { formatDate } from '../../utils';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts');
+  
+  // Extract all unique years
+  const years = [...new Set(
+    posts.map(post => post.data.date.getFullYear().toString())
+  )];
+  
+  return years.map(year => {
+    const filteredPosts = posts.filter(
+      post => post.data.date.getFullYear().toString() === year
+    );
+    
+    return {
+      params: { year },
+      props: { year, posts: filteredPosts },
+    };
+  });
+}
+
+const { year, posts } = Astro.props;
+const sortedPosts = posts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+
+<BaseLayout title={`Archives: ${year}`}>
+  <h1>Archives: {year}</h1>
+  
+  <ul class="post-list">
+    {sortedPosts.map(post => (
+      <li>
+        <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
+        <a href={`/posts/${post.slug}`}>{post.data.title}</a>
+      </li>
+    ))}
+  </ul>
+</BaseLayout>

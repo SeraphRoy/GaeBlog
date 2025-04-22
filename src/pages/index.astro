@@ -1,11 +1,41 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { formatDate } from '../utils';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+// Get all blog posts sorted by date
+const posts = await getCollection('posts');
+const sortedPosts = posts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+// Paginate posts (6 per page, same as your Jekyll setup)
+const postsPerPage = 6;
+const paginatedPosts = sortedPosts.slice(0, postsPerPage);
 ---
 
-<Layout>
-	<Welcome />
-</Layout>
+<BaseLayout title="Home" description="Gae Blog - Notes, Word Salad, etc.">
+  <h1>Gae Blog</h1>
+  <h2>Notes, Word Salad, etc.</h2>
+  
+  <div class="posts-container">
+    {paginatedPosts.map(post => (
+      <div class="post-card">
+        <h2><a href={`/posts/${post.slug}`}>{post.data.title}</a></h2>
+        <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
+        
+        {post.data.excerpt && <p>{post.data.excerpt}</p>}
+        
+        {post.data.categories && post.data.categories.length > 0 && (
+          <div class="categories">
+            {post.data.categories.map(category => (
+              <a href={`/categories/${category.toLowerCase()}`}>{category}</a>
+            ))}
+          </div>
+        )}
+      </div>
+    ))}
+  </div>
+  
+  <div class="pagination">
+    <a href="/posts/2" class="next-page">Next Page &raquo;</a>
+  </div>
+</BaseLayout>

@@ -1,0 +1,56 @@
+---
+// src/layouts/PostLayout.astro
+import BaseLayout from './BaseLayout.astro';
+import { formatDate } from '../utils';
+
+const { frontmatter, headings } = Astro.props;
+const { title, date, categories, tags, mathjax } = frontmatter;
+---
+
+<BaseLayout title={title} mathjax={mathjax}>
+  <article>
+    <h1>{title}</h1>
+    <div class="metadata">
+      <time datetime={date.toISOString()}>{formatDate(date)}</time>
+      
+      {categories && categories.length > 0 && (
+        <div class="categories">
+          <span>Categories:</span>
+          <ul>
+            {categories.map(category => (
+              <li><a href={`/categories/${category.toLowerCase()}`}>{category}</a></li>
+            ))}
+          </ul>
+        </div>
+      )}
+      
+      {tags && tags.length > 0 && (
+        <div class="tags">
+          <span>Tags:</span>
+          <ul>
+            {tags.map(tag => (
+              <li><a href={`/tags/${tag.toLowerCase()}`}>{tag}</a></li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+    
+    {headings.length > 0 && (
+      <aside class="toc">
+        <h2>Table of Contents</h2>
+        <ul>
+          {headings.map(heading => (
+            <li class={`level-${heading.depth}`}>
+              <a href={`#${heading.slug}`}>{heading.text}</a>
+            </li>
+          ))}
+        </ul>
+      </aside>
+    )}
+    
+    <div class="content">
+      <slot />
+    </div>
+  </article>
+</BaseLayout>

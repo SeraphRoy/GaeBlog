@@ -1,0 +1,74 @@
+---
+// src/layouts/BaseLayout.astro
+import '../styles/global.css';
+
+const { title, description, mathjax } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{title} | Gae Blog</title>
+  <meta name="description" content={description}>
+  
+  <!-- Add Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-40LC9SH4E1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-40LC9SH4E1');
+  </script>
+  
+  <!-- Add Netlify Identity Widget -->
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  
+  <!-- Add MathJax if needed -->
+  {mathjax && (
+    <>
+      <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      <script>
+        MathJax = {
+          tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']],
+          }
+        };
+      </script>
+    </>
+  )}
+</head>
+<body>
+  <div class="container">
+    <header>
+      <nav>
+        <a href="/">Home</a>
+        <a href="/archives">Archives</a>
+        <a href="/categories">Categories</a>
+        <a href="/tags">Tags</a>
+        <a href="/about">About</a>
+      </nav>
+    </header>
+    
+    <main>
+      <slot />
+    </main>
+    
+    <footer>
+      <p>&copy; {new Date().getFullYear()} Yanxi Chen. All rights reserved.</p>
+    </footer>
+  </div>
+  
+  <!-- Back to top script -->
+  <script src="https://unpkg.com/vanilla-back-to-top@7.2.1/dist/vanilla-back-to-top.min.js"></script>
+  <script>
+    addBackToTop({
+      diameter: 56,
+      backgroundColor: '#ff9800',
+      textColor: '#fff'
+    });
+  </script>
+</body>
+</html>
