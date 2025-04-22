@@ -1,0 +1,25 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+// Get all posts
+const posts = await getCollection('posts');
+
+// Extract all unique categories
+const allCategories = [...new Set(posts.flatMap(post => post.data.categories || []))];
+const sortedCategories = allCategories.sort();
+---
+
+<BaseLayout title="Categories">
+  <h1>Categories</h1>
+  
+  <div class="categories-container">
+    <ul class="category-list">
+      {sortedCategories.map((category) => (
+        <li>
+          <a href={`/categories/${category.toLowerCase()}`}>{category}</a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</BaseLayout>

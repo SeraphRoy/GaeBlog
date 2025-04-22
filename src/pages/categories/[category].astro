@@ -2,39 +2,34 @@
 // src/pages/categories/[category].astro
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
-import { formatDate } from '../../utils';
+
+export const prerender = true;
 
 export async function getStaticPaths() {
   const posts = await getCollection('posts');
   
-  // Extract all unique categories
+  // Extract unique categories
   const categories = [...new Set(
     posts.flatMap(post => post.data.categories || [])
   )];
   
-  return categories.map(category => {
-    const filteredPosts = posts.filter(
-      post => post.data.categories && post.data.categories.includes(category)
-    );
-    
-    return {
-      params: { category: category.toLowerCase() },
-      props: { category, posts: filteredPosts },
-    };
-  });
+  return categories.map(category => ({
+    params: { category: category.toLowerCase() },
+    props: { category, posts: posts.filter(post => 
+      post.data.categories && post.data.categories.includes(category)
+    )}
+  }));
 }
 
 const { category, posts } = Astro.props;
-const sortedPosts = posts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 ---
 
 <BaseLayout title={`Category: ${category}`}>
   <h1>Category: {category}</h1>
   
-  <ul class="post-list">
-    {sortedPosts.map(post => (
+  <ul>
+    {posts.map(post => (
       <li>
-        <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
         <a href={`/posts/${post.slug}`}>{post.data.title}</a>
       </li>
     ))}

@@ -1,0 +1,80 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+// Get all posts
+const posts = await getCollection('posts');
+
+// Group posts by year
+const postsByYear = posts.reduce((acc, post) => {
+  const year = new Date(post.data.date).getFullYear();
+  if (!acc[year]) {
+    acc[year] = [];
+  }
+  acc[year].push(post);
+  return acc;
+}, {});
+
+// Sort years in descending order
+const years = Object.keys(postsByYear).sort((a, b) => Number(b) - Number(a));
+
+// Sort posts within each year by date
+for (const year of years) {
+  postsByYear[year].sort((a, b) => new Date(b.data.date) - new Date(a.data.date));
+}
+---
+
+<BaseLayout title="Archives">
+  <h1>Archives</h1>
+  
+  <div class="archives-container">
+    {years.map((year) => (
+      <div class="year-section">
+        <h2 id={year}>{year}</h2>
+        <ul class="post-list">
+          {postsByYear[year].map((post) => (
+            <li>
+              <span class="post-date">
+                {new Date(post.data.date).toLocaleDateString('en-US', {
+                  month: 'short',
+                  day: 'numeric'
+                })}
+              </span>
+              <a href={`/posts/${post.slug}`}>{post.data.title}</a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </div>
+
+  <style>
+    .archives-container {
+      margin-top: 2rem;
+    }
+    .year-section {
+      margin-bottom: 2rem;
+    }
+    .year-section h2 {
+      border-bottom: 1px solid #eee;
+      padding-bottom: 0.5rem;
+      margin-top: 2rem;
+    }
+    .post-list {
+      list-style: none;
+      padding: 0;
+    }
+    .post-list li {
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: baseline;
+    }
+    .post-date {
+      color: #666;
+      margin-right: 1rem;
+      width: 90px;
+      display: inline-block
+      flex-shrink: 0;
+    }
+  </style>
+</BaseLayout>

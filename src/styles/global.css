@@ -1,0 +1,77 @@
+:root {
+  --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-size: 16px;
+  --text-color: #333;
+  --bg-color: #fff;
+  --link-color: #0077cc;
+  --header-color: #202020;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family);
+  font-size: var(--font-size);
+  line-height: 1.6;
+  color: var(--text-color);
+  background-color: var(--bg-color);
+  padding: 1rem;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+header {
+  margin-bottom: 2rem;
+}
+
+nav {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+nav a {
+  color: var(--link-color);
+  text-decoration: none;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--header-color);
+  margin-bottom: 0.5rem;
+}
+
+a {
+  color: var(--link-color);
+  text-decoration: none;
+}
+
+.posts-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+.post-card {
+  border-bottom: 1px solid #eee;
+  padding-bottom: 1rem;
+}
+
+time {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+footer {
+  margin-top: 3rem;
+  text-align: center;
+  color: #666;
+}

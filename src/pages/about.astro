@@ -1,0 +1,39 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="About">
+  <h1>About</h1>
+  
+  <div class="about-content">
+    <img src="/assets/My-Photo.JPG" alt="My Photo" />
+    
+    <div class="tags-section">
+      <span class="tag">#现充</span>
+      <span class="tag">#死宅</span>
+      <span class="tag">#中二</span>
+    </div>
+  </div>
+
+  <style>
+    .about-content {
+      margin-top: 2rem;
+    }
+    img {
+      max-width: 100%;
+      margin-bottom: 2rem;
+    }
+    .tags-section {
+      margin-top: 2rem;
+    }
+    .tag {
+      background-color: #f4f4f4;
+      padding: 0.3rem 0.8rem;
+      border-radius: 3px;
+      margin-right: 0.5rem;
+      color: #555;
+      display: inline-block;
+      margin-bottom: 0.5rem;
+    }
+  </style>
+</BaseLayout>

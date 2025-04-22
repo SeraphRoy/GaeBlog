@@ -1,0 +1,25 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+// Get all posts
+const posts = await getCollection('posts');
+
+// Extract all unique tags
+const allTags = [...new Set(posts.flatMap(post => post.data.tags || []))];
+const sortedTags = allTags.sort();
+---
+
+<BaseLayout title="Tags">
+  <h1>Tags</h1>
+  
+  <div class="tags-container">
+    <ul class="tag-list">
+      {sortedTags.map((tag) => (
+        <li>
+          <a href={`/tags/${tag.toLowerCase()}`}>{tag}</a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</BaseLayout>
